@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burme AI</title>
+    <title>Burme AI - မြန်မာစကားပြော AI အကူအညီ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="app-manifest.json">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="app-container">
-        <!-- Header with Settings Button -->
+        <!-- App Header -->
         <header class="app-header">
             <div class="header-left">
-                <img src="assets/icons/logo.png" alt="Burme AI" class="logo">
+                <img src="images/logo.png" alt="Burme AI" class="logo">
                 <h1>Burme AI</h1>
             </div>
             <div class="header-right">
@@ -26,7 +26,7 @@
             </div>
         </header>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="app-main">
             <!-- Chat View -->
             <div id="chat-view" class="view active-view">
@@ -34,16 +34,19 @@
                 
                 <div class="input-container">
                     <div class="input-actions">
-                        <button id="image-upload-btn" class="icon-btn">
+                        <button id="image-upload-btn" class="icon-btn" title="Upload Image">
                             <i class="fas fa-image"></i>
                             <input type="file" id="image-upload" accept="image/*" hidden>
                         </button>
-                        <button id="voice-input-btn" class="icon-btn">
+                        <button id="voice-input-btn" class="icon-btn" title="Voice Input">
                             <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="translate-btn" class="icon-btn" title="Translate">
+                            <i class="fas fa-language"></i>
                         </button>
                     </div>
                     <textarea id="user-input" placeholder="သင့်မေးခွန်းကိုရေးပါ..."></textarea>
-                    <button id="send-btn" class="send-btn">
+                    <button id="send-btn" class="send-btn" title="Send">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
@@ -52,15 +55,21 @@
             <!-- History View -->
             <div id="history-view" class="view">
                 <div class="history-header">
-                    <h2>စကားပြောမှတ်တမ်း</h2>
-                    <button id="clear-history" class="text-btn">ဖျက်ပစ်မည်</button>
+                    <h2><i class="fas fa-history"></i> စကားပြောမှတ်တမ်း</h2>
+                    <div>
+                        <button id="export-history" class="text-btn">ထုတ်ယူမည်</button>
+                        <button id="clear-history" class="text-btn danger">ဖျက်ပစ်မည်</button>
+                    </div>
                 </div>
                 <div id="history-list" class="history-list"></div>
             </div>
 
-            <!-- Image View -->
-            <div id="image-view" class="view">
-                <div id="image-output-container"></div>
+            <!-- Saved Items View -->
+            <div id="saved-view" class="view">
+                <div class="saved-header">
+                    <h2><i class="fas fa-bookmark"></i> သိမ်းဆည်းထားသောအရာများ</h2>
+                </div>
+                <div id="saved-items-container" class="saved-items"></div>
             </div>
         </main>
 
@@ -68,58 +77,43 @@
         <nav class="bottom-nav">
             <button class="nav-btn active" data-view="chat-view">
                 <i class="fas fa-comment"></i>
-                <span>Chat</span>
+                <span>စကားပြော</span>
             </button>
             <button class="nav-btn" data-view="history-view">
                 <i class="fas fa-history"></i>
-                <span>History</span>
+                <span>မှတ်တမ်း</span>
             </button>
-            <button class="nav-btn" data-view="image-view">
-                <i class="fas fa-images"></i>
-                <span>Images</span>
+            <button class="nav-btn" data-view="saved-view">
+                <i class="fas fa-bookmark"></i>
+                <span>သိမ်းဆည်းမှုများ</span>
             </button>
         </nav>
     </div>
 
-    <!-- Settings Modal (Now replaced with settings.html) -->
-    <!-- About Modal (Now replaced with about.html) -->
+    <!-- Loading Indicator -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">လုပ်ဆောင်နေပါသည်...</p>
+    </div>
 
-    <script src="scripts/history-manager.js"></script>
-    <script src="scripts/settings-manager.js"></script>
-    <script src="scripts/image-processor.js"></script>
-    <script src="gemini-api.js"></script>
-    <script src="script.js"></script>
-    
-    <script>
-        // Add navigation to settings and about pages
-        document.getElementById('settings-btn').addEventListener('click', () => {
-            window.location.href = 'pages/settings.html';
-        });
-        
-        document.getElementById('about-btn').addEventListener('click', () => {
-            window.location.href = 'pages/about.html';
-        });
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="alert-title">သတိပေးချက်</h3>
+                <button id="close-alert" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="alert-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="alert-confirm" class="btn primary">အိုကေ</button>
+            </div>
+        </div>
+    </div>
 
-        // Apply current theme on load
-        document.addEventListener('DOMContentLoaded', () => {
-            const settings = SettingsManager.getSettings();
-            document.documentElement.setAttribute('data-theme', settings.darkMode ? 'dark' : 'light');
-            
-            if (settings.themeColor) {
-                const colorValue = getColorValue(settings.themeColor);
-                document.documentElement.style.setProperty('--primary-color', colorValue);
-            }
-            
-            function getColorValue(color) {
-                const colors = {
-                    blue: '#4285f4',
-                    green: '#34a853',
-                    red: '#ea4335',
-                    purple: '#9c27b0'
-                };
-                return colors[color] || '#4285f4';
-            }
-        });
-    </script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
