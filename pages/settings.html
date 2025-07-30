@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ဆက်တင်များ - Burme AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="settings-container">
+        <header class="settings-header">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>ဆက်တင်များ</h1>
+        </header>
+
+        <main class="settings-main">
+            <section class="settings-section">
+                <h2><i class="fas fa-paint-brush"></i> အပြင်အဆင်</h2>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-moon"></i>
+                        <span>အမှောင်အပြင်</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-palette"></i>
+                        <span>အရောင်အသွေး</span>
+                    </div>
+                    <div class="color-options">
+                        <div class="color-option" data-color="blue" style="background-color: #4285f4;"></div>
+                        <div class="color-option" data-color="green" style="background-color: #34a853;"></div>
+                        <div class="color-option" data-color="red" style="background-color: #ea4335;"></div>
+                        <div class="color-option" data-color="purple" style="background-color: #9c27b0;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2><i class="fas fa-volume-up"></i> အသံ</h2>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-text-to-speech"></i>
+                        <span>စာဖတ်အသံ</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tts-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-microphone"></i>
+                        <span>အသံဖြင့်ရိုက်ခြင်း</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="voice-input-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2><i class="fas fa-language"></i> ဘာသာစကား</h2>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-globe"></i>
+                        <span>အက်ပ်ဘာသာစကား</span>
+                    </div>
+                    <select id="app-language" class="language-select">
+                        <option value="my">မြန်မာ</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-robot"></i>
+                        <span>AI ဘာသာစကား</span>
+                    </div>
+                    <select id="ai-language" class="language-select">
+                        <option value="my">မြန်မာ</option>
+                        <option value="en">English</option>
+                        <option value="mixed">ရောထားသော</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2><i class="fas fa-database"></i> ဒေတာ</h2>
+                <div class="setting-item clickable" id="export-data">
+                    <div class="setting-info">
+                        <i class="fas fa-file-export"></i>
+                        <span>ဒေတာထုတ်ယူမည်</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="setting-item clickable" id="import-data">
+                    <div class="setting-info">
+                        <i class="fas fa-file-import"></i>
+                        <span>ဒေတာထည့်သွင်းမည်</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="setting-item clickable" id="clear-data">
+                    <div class="setting-info">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>ဒေတာများဖျက်ပစ်မည်</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="scripts/settings-manager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const settings = SettingsManager.getSettings();
+            
+            // Initialize toggle switches
+            document.getElementById('dark-mode-toggle').checked = settings.darkMode;
+            document.getElementById('tts-toggle').checked = settings.textToSpeech;
+            document.getElementById('voice-input-toggle').checked = settings.voiceInput;
+            document.getElementById('app-language').value = settings.appLanguage || 'my';
+            document.getElementById('ai-language').value = settings.aiLanguage || 'my';
+            
+            // Set active color
+            document.querySelector(`.color-option[data-color="${settings.themeColor || 'blue'}"]`)
+                .classList.add('active');
+            
+            // Event listeners
+            document.getElementById('dark-mode-toggle').addEventListener('change', (e) => {
+                SettingsManager.updateSetting('darkMode', e.target.checked);
+                applyTheme();
+            });
+            
+            document.getElementById('tts-toggle').addEventListener('change', (e) => {
+                SettingsManager.updateSetting('textToSpeech', e.target.checked);
+            });
+            
+            document.getElementById('voice-input-toggle').addEventListener('change', (e) => {
+                SettingsManager.updateSetting('voiceInput', e.target.checked);
+            });
+            
+            document.getElementById('app-language').addEventListener('change', (e) => {
+                SettingsManager.updateSetting('appLanguage', e.target.value);
+                // In a real app, you'd reload or update UI language here
+            });
+            
+            document.getElementById('ai-language').addEventListener('change', (e) => {
+                SettingsManager.updateSetting('aiLanguage', e.target.value);
+            });
+            
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.color-option').forEach(opt => 
+                        opt.classList.remove('active'));
+                    option.classList.add('active');
+                    const color = option.dataset.color;
+                    SettingsManager.updateSetting('themeColor', color);
+                    applyTheme();
+                });
+            });
+            
+            document.getElementById('export-data').addEventListener('click', exportData);
+            document.getElementById('import-data').addEventListener('click', importData);
+            document.getElementById('clear-data').addEventListener('click', clearData);
+            
+            function applyTheme() {
+                const settings = SettingsManager.getSettings();
+                document.documentElement.setAttribute('data-theme', settings.darkMode ? 'dark' : 'light');
+                
+                if (settings.themeColor) {
+                    document.documentElement.style.setProperty('--primary-color', getColorValue(settings.themeColor));
+                }
+            }
+            
+            function getColorValue(color) {
+                const colors = {
+                    blue: '#4285f4',
+                    green: '#34a853',
+                    red: '#ea4335',
+                    purple: '#9c27b0'
+                };
+                return colors[color] || '#4285f4';
+            }
+            
+            function exportData() {
+                const history = HistoryManager.getHistory();
+                const settings = SettingsManager.getSettings();
+                const data = {
+                    history,
+                    settings,
+                    exportedAt: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `burme-ai-backup-${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                alert('ဒေတာများအောင်မြင်စွာထုတ်ယူပြီးပါပြီ');
+            }
+            
+            function importData() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                
+                input.onchange = e => {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = event => {
+                        try {
+                            const data = JSON.parse(event.target.result);
+                            
+                            if (confirm('လက်ရှိဒေတာများအစားထိုးသွားမည်။ ဆက်လုပ်လိုပါသလား?')) {
+                                if (data.history) {
+                                    localStorage.setItem(HistoryManager.STORAGE_KEY, JSON.stringify(data.history));
+                                }
+                                
+                                if (data.settings) {
+                                    localStorage.setItem(SettingsManager.STORAGE_KEY, JSON.stringify(data.settings));
+                                }
+                                
+                                alert('ဒေတာများအောင်မြင်စွာထည့်သွင်းပြီးပါပြီ။ အက်ပ်ကို restart လုပ်ပါ။');
+                            }
+                        } catch (error) {
+                            alert('ဒေတာဖိုင်မမှန်ကန်ပါ: ' + error.message);
+                        }
+                    };
+                    
+                    reader.readAsText(file);
+                };
+                
+                input.click();
+            }
+            
+            function clearData() {
+                if (confirm('စကားပြောမှတ်တမ်းနှင့် ဆက်တင်အားလုံးကို ဖျက်ပစ်မည်။ သေချာပါသလား?')) {
+                    localStorage.clear();
+                    alert('ဒေတာများအားလုံးဖျက်ပစ်ပြီးပါပြီ။ အက်ပ်ကို restart လုပ်ပါ။');
+                    window.location.href = 'index.html';
+                }
+            }
+            
+            // Apply current theme on load
+            applyTheme();
+        });
+    </script>
+</body>
+  </html>
