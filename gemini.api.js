@@ -1,4 +1,4 @@
-const API_KEY = 'YOUR_GEMINI_API_KEY'; // Replace with your actual API key
+const API_KEY = 'AIzaSyBL1OZxLYxmkN1jpFXZEoZzN-ocFU3yK0Q'; // Replace with your actual API key
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 const VISION_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent';
 
