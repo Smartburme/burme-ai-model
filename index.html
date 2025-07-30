@@ -10,15 +10,20 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
+        <!-- Header with Settings Button -->
         <header class="app-header">
             <div class="header-left">
                 <img src="assets/icons/logo.png" alt="Burme AI" class="logo">
                 <h1>Burme AI</h1>
             </div>
-            <button id="settings-btn" class="icon-btn">
-                <i class="fas fa-cog"></i>
-            </button>
+            <div class="header-right">
+                <button id="about-btn" class="icon-btn" title="About">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+                <button id="settings-btn" class="icon-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -53,7 +58,7 @@
                 <div id="history-list" class="history-list"></div>
             </div>
 
-            <!-- Image Output View -->
+            <!-- Image View -->
             <div id="image-view" class="view">
                 <div id="image-output-container"></div>
             </div>
@@ -76,25 +81,45 @@
         </nav>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>ဆက်တင်များ</h2>
-                <button id="close-settings" class="icon-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Settings content will be loaded here -->
-            </div>
-        </div>
-    </div>
+    <!-- Settings Modal (Now replaced with settings.html) -->
+    <!-- About Modal (Now replaced with about.html) -->
 
     <script src="scripts/history-manager.js"></script>
     <script src="scripts/settings-manager.js"></script>
     <script src="scripts/image-processor.js"></script>
     <script src="gemini-api.js"></script>
     <script src="script.js"></script>
+    
+    <script>
+        // Add navigation to settings and about pages
+        document.getElementById('settings-btn').addEventListener('click', () => {
+            window.location.href = 'settings.html';
+        });
+        
+        document.getElementById('about-btn').addEventListener('click', () => {
+            window.location.href = 'about.html';
+        });
+
+        // Apply current theme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const settings = SettingsManager.getSettings();
+            document.documentElement.setAttribute('data-theme', settings.darkMode ? 'dark' : 'light');
+            
+            if (settings.themeColor) {
+                const colorValue = getColorValue(settings.themeColor);
+                document.documentElement.style.setProperty('--primary-color', colorValue);
+            }
+            
+            function getColorValue(color) {
+                const colors = {
+                    blue: '#4285f4',
+                    green: '#34a853',
+                    red: '#ea4335',
+                    purple: '#9c27b0'
+                };
+                return colors[color] || '#4285f4';
+            }
+        });
+    </script>
 </body>
 </html>
