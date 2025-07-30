@@ -1,6 +1,6 @@
 # Burme AI - မြန်မာစကားပြော AI အကူအညီ
 
-![Burme AI Logo](./assets/assets/images/logo.png)
+![Burme AI Logo](./assets/assets/icons/logo.png)
 
 မြန်မာဘာသာစကားဖြင့် အပြန်အလှန်ဆက်သွယ်နိုင်သော AI အကူအညီပေးစနစ်
 
