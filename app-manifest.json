@@ -1,0 +1,21 @@
+{
+    "name": "Burme AI",
+    "short_name": "BurmeAI",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4285f4",
+    "description": "Burmese Language AI Assistant",
+    "icons": [
+        {
+            "src": "assets/icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icon-large.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
