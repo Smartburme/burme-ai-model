@@ -3,7 +3,8 @@ main = "src/index.js"
 compatibility_date = "2025-07-30"
 
 [vars]
-API_KEY = "your-gemini-api-key"
+# Remove the actual API key from this file
+# GEMINI_API_KEY will be set via secrets
 
 [build]
 command = "npm run build"
