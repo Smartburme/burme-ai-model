@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burme AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="app-manifest.json">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="assets/logo.png" alt="Burme AI Logo" class="logo">
+            <h1>Burme AI</h1>
+        </header>
+        
+        <div class="chat-container">
+            <div id="chat-history" class="chat-history"></div>
+            
+            <div class="input-area">
+                <textarea id="user-input" placeholder="သင့်မေးခွန်းကိုရေးပါ..."></textarea>
+                <button id="send-btn">စေလွှတ်ပါ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="gemini-api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
